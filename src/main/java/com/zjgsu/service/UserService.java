@@ -2,8 +2,6 @@ package com.zjgsu.service;
 
 import com.zjgsu.dao.UserDao;
 import com.zjgsu.entity.UserEntity;
-import org.apache.commons.lang.xwork.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
