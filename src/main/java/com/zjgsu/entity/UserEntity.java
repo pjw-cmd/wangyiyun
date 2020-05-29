@@ -8,37 +8,39 @@ import javax.persistence.*;
 @Table(name = "user", schema = "music_cloud", catalog = "")
 public class UserEntity {
     private int id;
-    private String name;
-    private String passwd;
+    private String userId;
+    private String userName;
+    private String userPassword;
+
 
     @Id
-    @Column(name = "id")
-    public int getId() {
-        return id;
+    @Column(name = "user_id")
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Basic
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Basic
-    @Column(name = "passwd")
-    public String getPasswd() {
-        return passwd;
+    @Column(name = "user_name")
+    public String getUserName() {
+        return userName;
     }
 
-    public void setPasswd(String passwd) {
-        this.passwd = passwd;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @Basic
+    @Column(name = "user_password")
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     @Override
@@ -48,18 +50,18 @@ public class UserEntity {
 
         UserEntity that = (UserEntity) o;
 
-        if (id != that.id) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (passwd != null ? !passwd.equals(that.passwd) : that.passwd != null) return false;
+        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
+        if (userPassword != null ? !userPassword.equals(that.userPassword) : that.userPassword != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (passwd != null ? passwd.hashCode() : 0);
+        int result = userId != null ? userId.hashCode() : 0;
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (userPassword != null ? userPassword.hashCode() : 0);
         return result;
     }
 }

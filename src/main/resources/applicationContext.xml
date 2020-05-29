@@ -9,36 +9,50 @@
 
     <!-- 使用annotation -->
     <context:annotation-config/>
-    <!-- 使用annotation自动注册bean,并检查@Controller, @Service, @Repository注解已被注入 -->
-    <context:component-scan base-package="com.zjgsu.controller"/>
-    <context:component-scan base-package="com.zjgsu.service"/>
-    <context:component-scan base-package="com.zjgsu.dao"/>
-<!--    <mvc:default-servlet-handler/>-->
+    <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--    <bean class="org.springframework.http.converter.StringHttpMessageConverter">-->
+    <!--        <property name="supportedMediaTypes">-->
+    <!--            <list>-->
+    <!--                <value>text/plain;charset=UTF-8</value>-->
+    <!--                <value>text/html;charset=UTF-8</value>-->
+    <!--                <value>application/json;charset=UTF-8</value>-->
+    <!--            </list>-->
+    <!--        </property>-->
+    <!--    </bean>-->
+    <!--    <context:component-scan base-package="com.zjgsu.dao"/>-->
+    <!--    <mvc:default-servlet-handler/>-->
     <!-- data connection setting -->
     <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="url" value="${jdbc_url}"/>
         <property name="username" value="${jdbc_username}"/>
         <property name="password" value="${jdbc_password}"/>
         <!--        <property name="driverClassName" value="${driverClassName}"/>-->
-        <property name="initialSize" value="0"/>
-        <property name="maxActive" value="20"/>
-        <property name="minIdle" value="0"/>
-        <property name="maxWait" value="60000"/>
+        <property name="initialSize" value="${initialSize}"/>
+        <property name="maxActive" value="${maxActive}"/>
+        <property name="minIdle" value="${minIdle}"/>
+        <property name="maxWait" value="${maxWait}"/>
         <!--
         <property name="poolPreparedStatements" value="true" />
         <property name="maxPoolPreparedStatementPerConnectionSize" value="33" />
         <property name="validationQuery" value="${validationQuery}" />
         -->
-        <property name="testOnBorrow" value="false"/>
-        <property name="testOnReturn" value="false"/>
-        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="${testOnBorrow}"/>
+        <property name="testOnReturn" value="${testOnReturn}"/>
+        <property name="testWhileIdle" value="${testWhileIdle}"/>
 
-        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
-        <property name="minEvictableIdleTimeMillis" value="25200000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}"/>
 
-        <property name="removeAbandoned" value="true"/>
-        <property name="removeAbandonedTimeout" value="1800"/>
-        <property name="logAbandoned" value="true"/>
+        <property name="removeAbandoned" value="${removeAbandoned}"/>
+        <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
+        <property name="logAbandoned" value="${logAbandoned}"/>
 
     </bean>
 
@@ -51,20 +65,20 @@
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.autoReconnect">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.autoReconnect">${hibernate.autoReconnect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
                 <!-- 解决session关闭问题 -->
-                <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
-                <prop key="current_session_context_class">thread</prop>
+                <prop key="hibernate.enable_lazy_load_no_trans">${hibernate.enable_lazy_load_no_trans}</prop>
+                <prop key="current_session_context_class">${current_session_context_class}</prop>
                 <!--
                 <prop key="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</prop>
                 -->
-                <prop key="hibernate.max_fetch_depth">3</prop>
-                <prop key="hibernate.connection.url">jdbc:mysql://10.21.243.206:3306/music_cloud</prop>
-                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
+                <prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+                <prop key="hibernate.connection.url">${hibernate.connection.url}</prop>
+                <prop key="hibernate.connection.driver_class">${hibernate.connection.driver_class}</prop>
             </props>
 
         </property>
@@ -75,11 +89,6 @@
                 <value>com.zjgsu.entity</value>
             </list>
         </property>
-        <property name="mappingLocations">
-            <list>
-                <value>classpath:hibernate.cfg.xml</value>
-            </list>
-        </property>
     </bean>
 
     <!-- 用注解来实现事物管理 -->
@@ -87,4 +96,8 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+
+    <context:component-scan base-package="com.zjgsu.service"/>
+    <context:component-scan base-package="com.zjgsu.dao"/>
 </beans>
