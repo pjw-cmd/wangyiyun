@@ -1,4 +1,6 @@
 package com.zjgsu.dao;
 
-public interface PlayListDao {
+import com.zjgsu.entity.PlayListEntity;
+
+public interface PlayListDao  extends BaseDao<PlayListEntity>{
 }
