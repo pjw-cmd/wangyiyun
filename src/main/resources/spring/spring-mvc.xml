@@ -18,15 +18,12 @@
     <!--    </context:component-scan>-->
 
     <context:component-scan base-package="com.zjgsu.controller"/>
-    <context:component-scan base-package="com.zjgsu.service"/>
-    <context:component-scan base-package="com.zjgsu.dao"/>
-
 
     <!-- 开启注解-->
     <mvc:annotation-driven/>
-    <mvc:resources location="/static/js/" mapping="/js/**"/>
-    <mvc:resources location="/static/img/" mapping="/img/**"/>
-    <mvc:resources location="/static/css/" mapping="/css/**"/>
+<!--    <mvc:resources location="/static/js/" mapping="/js/**"/>-->
+<!--    <mvc:resources location="/static/img/" mapping="/img/**"/>-->
+<!--    <mvc:resources location="/static/css/" mapping="/css/**"/>-->
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 

@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "play_list_item", schema = "music_cloud", catalog = "")
 public class PlayListItemEntity implements Serializable {
-    private int playListId;
+    private String playListId;
     private String musicId;
     private Integer isDelete;
     private Timestamp createTime;
@@ -16,11 +16,11 @@ public class PlayListItemEntity implements Serializable {
     @Id
     @Basic
     @Column(name = "play_list_id")
-    public int getPlayListId() {
+    public String getPlayListId() {
         return playListId;
     }
 
-    public void setPlayListId(int playListId) {
+    public void setPlayListId(String playListId) {
         this.playListId = playListId;
     }
 

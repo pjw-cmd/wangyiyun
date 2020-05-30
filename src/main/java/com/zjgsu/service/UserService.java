@@ -2,11 +2,11 @@ package com.zjgsu.service;
 
 import com.zjgsu.dao.UserDao;
 import com.zjgsu.entity.UserEntity;
+import com.zjgsu.utils.IDGenerator;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -23,12 +23,14 @@ public class UserService {
         return false;
     }
 
-    public boolean register(String userName, String userPassword) {
+    public String register(String userName, String userPassword) {
         UserEntity userEntity = new UserEntity();
+        userEntity.setUserId(IDGenerator.generateID());
         userEntity.setUserName(userName);
         userEntity.setUserPassword(userPassword);
-        String save = userDao.save(userEntity);
-        return save != null;
+        String userId = userDao.save(userEntity);
+        System.out.println(userId);
+        return userEntity.getUserId();
     }
 
 

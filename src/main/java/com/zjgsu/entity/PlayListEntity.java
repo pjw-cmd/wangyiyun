@@ -7,27 +7,27 @@ import java.util.Objects;
 @Entity
 @Table(name = "play_list", schema = "music_cloud", catalog = "")
 public class PlayListEntity implements Serializable {
-    private int userId;
-    private Integer playListId;
+    private String userId;
+    private String playListId;
     private String playListName;
 
     @Id
     @Column(name = "user_id")
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
     @Basic
     @Column(name = "play_list_id")
-    public Integer getPlayListId() {
+    public String getPlayListId() {
         return playListId;
     }
 
-    public void setPlayListId(Integer playListId) {
+    public void setPlayListId(String playListId) {
         this.playListId = playListId;
     }
 

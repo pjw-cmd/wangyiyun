@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans
-	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
 						http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
 						http://www.springframework.org/schema/tx 
 						http://www.springframework.org/schema/tx/spring-tx.xsd
@@ -13,76 +13,107 @@
 						http://www.springframework.org/schema/context/spring-context.xsd
 						http://www.springframework.org/schema/aop
 						http://www.springframework.org/schema/aop/spring-aop.xsd">
-	
-	<!-- 包扫描 -->
-	<context:component-scan base-package="com.zjgsu">
-		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-	</context:component-scan>
 
-	<!-- 引入数据库资源文件 -->
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:properties/database.properties" />
-	</bean>
 
-	<!-- 配置数据源 -->
-	<bean id="dataSource"
-		  class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName" value="${driverClassName}"></property>
-		<property name="url" value="${url}"></property>
-		<property name="username" value="${userName}"></property>
-		<property name="password" value="${password}"></property>
-	</bean>
+    <context:component-scan base-package="com.zjgsu.service"/>
+    <context:component-scan base-package="com.zjgsu.dao"/>
+    <!-- 引入数据库资源文件 -->
+    <context:property-placeholder location="classpath:properties/database.properties"/>
 
-	<!-- AOP -->
-	<aop:aspectj-autoproxy/>
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${driverClassName}"></property>
+        <property name="url" value="${jdbc_url}"></property>
+        <property name="username" value="${jdbc_username}"></property>
+        <property name="password" value="${jdbc_password}"></property>
 
-	<!-- 配置 hibernate session -->
-	<bean id="sessionFactory"
-		  class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource"/>
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.format_sql">true</prop>
+        <property name="initialSize" value="${initialSize}"/>
+        <property name="maxActive" value="${maxActive}"/>
+        <property name="minIdle" value="${minIdle}"/>
+        <property name="maxWait" value="${maxWait}"/>
+        <!--
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="33" />
+        <property name="validationQuery" value="${validationQuery}" />
+        -->
+        <property name="testOnBorrow" value="${testOnBorrow}"/>
+        <property name="testOnReturn" value="${testOnReturn}"/>
+        <property name="testWhileIdle" value="${testWhileIdle}"/>
 
-				<prop key="hibernate.cache.use_second_level_cache">false</prop>
-				<prop key="hibernate.cache.use_query_cache">false</prop>
-				<prop key="current_session_context_class">thread</prop>
-				<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
-			</props>
-		</property>
-		<property name="packagesToScan">
-			<list>
-				<value>com.zjgsu.entity</value>
-			</list>
-		</property>
-	</bean>
+        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}"/>
 
-	<!-- 配置事务管理器 -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+        <property name="removeAbandoned" value="${removeAbandoned}"/>
+        <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
+        <property name="logAbandoned" value="${logAbandoned}"/>
+    </bean>
 
-	<!--注意！如果service目录变了，需要改这里的内容，否则会报错-->
-<!--	<aop:config proxy-target-class="true">-->
-<!--		<aop:advisor pointcut="execution(public * com.zjgsu.service.*Service.*(..))" advice-ref="txAdvice"/>-->
-<!--	</aop:config>-->
+    <!-- AOP -->
+    <aop:aspectj-autoproxy/>
 
-	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+    <!-- 配置 hibernate session -->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <!--                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>-->
+                <!--                <prop key="hibernate.hbm2ddl.auto">update</prop>-->
+                <!--                <prop key="hibernate.show_sql">false</prop>-->
+                <!--                <prop key="hibernate.format_sql">false</prop>-->
+                <!--                <prop key="hibernate.connection.autocommit">true</prop>-->
+                <!--                <prop key="hibernate.cache.use_second_level_cache">false</prop>-->
+                <!--                <prop key="hibernate.cache.use_query_cache">false</prop>-->
+                <!--                <prop key="current_session_context_class">thread</prop>-->
+                <!--                <prop key="hibernate.current_session_context_class">-->
+                <!--                    org.springframework.orm.hibernate4.SpringSessionContext-->
+                <!--                </prop>-->
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.autoReconnect">${hibernate.autoReconnect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <!-- 解决session关闭问题 -->
+                <prop key="hibernate.enable_lazy_load_no_trans">${hibernate.enable_lazy_load_no_trans}</prop>
+                <prop key="current_session_context_class">${current_session_context_class}</prop>
+                <!--
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</prop>
+                -->
+                <prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+                <prop key="hibernate.connection.url">jdbc:mysql://10.21.243.206:3306/music_cloud</prop>
+                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
+            </props>
+        </property>
+        <property name="packagesToScan">
+            <list>
+                <value>com.zjgsu.entity</value>
+            </list>
+        </property>
+    </bean>
 
-	<tx:advice id="txAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<tx:method name="get*" read-only="true" propagation="REQUIRED"/>
-			<tx:method name="list*" read-only="true" propagation="REQUIRED"/>
-			<tx:method name="find*" read-only="true" propagation="REQUIRED"/>
-			<tx:method name="save*" propagation="REQUIRED" />
-			<tx:method name="delete*" propagation="REQUIRED" />
-			<tx:method name="update*" propagation="REQUIRED" />
-			<tx:method name="add*" propagation="REQUIRED" />
-			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
-		</tx:attributes>
-	</tx:advice>
-    
-   </beans>
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!--注意！如果service目录变了，需要改这里的内容，否则会报错-->
+    <!--	<aop:config proxy-target-class="true">-->
+    <!--		<aop:advisor pointcut="execution(public * com.zjgsu.service.*Service.*(..))" advice-ref="txAdvice"/>-->
+    <!--	</aop:config>-->
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" propagation="REQUIRED"/>
+            <tx:method name="list*" read-only="true" propagation="REQUIRED"/>
+            <tx:method name="find*" read-only="true" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+</beans>

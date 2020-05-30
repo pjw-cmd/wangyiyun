@@ -1,5 +1,7 @@
 package com.zjgsu.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,22 +9,21 @@ import java.util.Objects;
 @Entity
 @Table(name = "user", schema = "music_cloud", catalog = "")
 public class UserEntity implements Serializable {
-    private int userId;
+    private String userId;
     private String userName;
     private String userPassword;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    @Id
+    @Basic
     @Column(name = "user_name")
     public String getUserName() {
         return userName;

@@ -48,7 +48,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     private static final int GET_RESULT_NUM = 1;
 
     public BaseDaoImpl() {
-        System.out.println("123123" + this.getClass().getGenericSuperclass());
         Type type = this.getClass().getGenericSuperclass();
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
@@ -60,7 +59,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Override
     public String save(T t) {
-        return (String) this.getSession().save(t);
+        return (String)this.getSession().save(t);
     }
 
     @Override
