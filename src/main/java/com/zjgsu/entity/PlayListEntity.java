@@ -2,6 +2,7 @@ package com.zjgsu.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -9,7 +10,7 @@ import java.util.Objects;
 public class PlayListEntity implements Serializable {
     private String userId;
     private String playListId;
-    private String playListName;
+    private Timestamp createTime;
 
     @Id
     @Column(name = "user_id")
@@ -31,14 +32,15 @@ public class PlayListEntity implements Serializable {
         this.playListId = playListId;
     }
 
+
     @Basic
-    @Column(name = "play_list_name")
-    public String getPlayListName() {
-        return playListName;
+    @Column(name = "create_time")
+    public Timestamp getCreateTime() {
+        return createTime;
     }
 
-    public void setPlayListName(String playListName) {
-        this.playListName = playListName;
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
     }
 
     @Override
@@ -46,13 +48,13 @@ public class PlayListEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayListEntity that = (PlayListEntity) o;
-        return userId == that.userId &&
+        return Objects.equals(userId, that.userId) &&
                 Objects.equals(playListId, that.playListId) &&
-                Objects.equals(playListName, that.playListName);
+                Objects.equals(createTime, that.createTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, playListId, playListName);
+        return Objects.hash(userId, playListId, createTime);
     }
 }

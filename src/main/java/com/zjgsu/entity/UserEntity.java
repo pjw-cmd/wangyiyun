@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -12,6 +13,7 @@ public class UserEntity implements Serializable {
     private String userId;
     private String userName;
     private String userPassword;
+    private Timestamp createTime;
 
     @Id
     @Column(name = "user_id")
@@ -56,5 +58,15 @@ public class UserEntity implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(userId, userName, userPassword);
+    }
+
+    @Basic
+    @Column(name = "create_time")
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
     }
 }

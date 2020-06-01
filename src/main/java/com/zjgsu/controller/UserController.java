@@ -24,15 +24,18 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String login(@RequestBody String jsonString) {
+        /*
+            登录功能
+         */
         JSONObject jsonObject = JSONObject.parseObject(jsonString);
         Response transMessage = new Response();
-        boolean login = userService.login(jsonObject.getString("user_name"), jsonObject.getString("user_password"));
-
-        if (login) {
-            transMessage.setStatus(200);
+        String userId = userService.login(jsonObject.getString("user_name"), jsonObject.getString("user_password"));
+        if (StringUtils.isNotBlank(userId)) {
+            transMessage.setcode(200);
             transMessage.setMessage("登录成功");
+            transMessage.setContent(userId);
         } else {
-            transMessage.setStatus(300);
+            transMessage.setcode(300);
             transMessage.setMessage("登录失败");
         }
         return JSON.toJSONString(transMessage);
@@ -41,17 +44,23 @@ public class UserController {
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String register(@RequestBody String jsonString) {
+        /*
+            注册功能
+         */
         JSONObject jsonObject = JSONObject.parseObject(jsonString);
         Response transMessage = new Response();
+        transMessage.setcode(300);
+        transMessage.setMessage("注册失败");
         String userName = jsonObject.getString("user_name");
         String userPassword = jsonObject.getString("user_password");
         String userId = userService.register(userName, userPassword);
         if (StringUtils.isNotBlank(userId)) {
-            transMessage.setStatus(200);
-            transMessage.setMessage("注册成功");
-        } else {
-            transMessage.setStatus(300);
-            transMessage.setMessage("注册失败");
+            // 注册完后自动为其创建播放列表
+            String playListId = playListService.createPlayList(userId);
+            if (StringUtils.isNotBlank(playListId)) {
+                transMessage.setcode(200);
+                transMessage.setMessage("注册成功");
+            }
         }
         return JSON.toJSONString(transMessage);
     }

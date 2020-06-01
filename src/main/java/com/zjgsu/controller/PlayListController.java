@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zjgsu.service.PlayListService;
 import com.zjgsu.utils.Response;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +31,11 @@ public class PlayListController {
         String musicId = jsonObject.getString("music_id");
         String playListId = playListService.addMusicToPlayList(playlistId, musicId);
 
-        if (playListId != null) {
-            transMessage.setStatus(200);
+        if (StringUtils.isNotBlank(playListId)) {
+            transMessage.setcode(200);
             transMessage.setMessage("添加成功");
         } else {
-            transMessage.setStatus(300);
+            transMessage.setcode(300);
             transMessage.setMessage("添加失败");
         }
         return JSON.toJSONString(transMessage);
@@ -52,15 +53,8 @@ public class PlayListController {
         String musicId = jsonObject.getString("music_id");
 
         playListService.deleteMusicItem(playlistId, musicId);
-        return "";
-//        boolean success = userService.register(userName, userPassword);
-//        if (success) {
-//            transMessage.setStatus(200);
-//            transMessage.setMessage("注册成功");
-//        } else {
-//            transMessage.setStatus(300);
-//            transMessage.setMessage("注册失败");
-//        }
-//        return JSON.toJSONString(transMessage);
+        transMessage.setcode(200);
+        transMessage.setMessage("删除成功");
+        return JSON.toJSONString(transMessage);
     }
 }

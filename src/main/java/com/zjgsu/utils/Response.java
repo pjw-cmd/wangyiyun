@@ -5,25 +5,25 @@ package com.zjgsu.utils;
  */
 
 public class Response {
-    public int status;
+    public int code;
     public String message;
     public Object content;
 
     public Response() {
     }
 
-    public Response(int status, String message, Object content) {
-        this.status = status;
+    public Response(int code, String message, Object content) {
+        this.code = code;
         this.message = message;
         this.content = content;
     }
 
-    public int getStatus() {
-        return status;
+    public int getcode() {
+        return code;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setcode(int code) {
+        this.code = code;
     }
 
     public String getMessage() {

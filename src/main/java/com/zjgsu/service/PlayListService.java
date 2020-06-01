@@ -4,10 +4,12 @@ import com.zjgsu.dao.PlayListDao;
 import com.zjgsu.dao.PlayListItemDao;
 import com.zjgsu.entity.PlayListEntity;
 import com.zjgsu.entity.PlayListItemEntity;
+import com.zjgsu.utils.IDGenerator;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 public class PlayListService {
@@ -23,7 +25,7 @@ public class PlayListService {
     public String createPlayList(String user_id) {
         PlayListEntity playListEntity = new PlayListEntity();
         playListEntity.setUserId(user_id);
-
+        playListEntity.setPlayListId(IDGenerator.generateID());
         return playListDao.save(playListEntity);
     }
 

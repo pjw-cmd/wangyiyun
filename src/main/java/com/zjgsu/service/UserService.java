@@ -14,23 +14,31 @@ public class UserService {
     @Autowired
     UserDao userDao;
 
-    public boolean login(String userName, String userPassword) {
-        UserEntity userEntity = userDao.getByCriterion(Restrictions.eq("userName", userName));
-        if (userEntity != null) {
-            return userPassword.equals(userEntity.getUserPassword());
+    public String login(String userName, String userPassword) {
+        UserEntity existUserEntity = userDao.getByCriterion(Restrictions.eq("userName", userName));
+        if (existUserEntity != null) {
+            if (userPassword.equals(existUserEntity.getUserPassword())) {
+                return existUserEntity.getUserId();
+            }
+            return null;
         }
 
-        return false;
+        return null;
     }
 
     public String register(String userName, String userPassword) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUserId(IDGenerator.generateID());
-        userEntity.setUserName(userName);
-        userEntity.setUserPassword(userPassword);
-        String userId = userDao.save(userEntity);
-        System.out.println(userId);
-        return userEntity.getUserId();
+        UserEntity existUserEntity = userDao.getByCriterion(Restrictions.eq("userName", userName));
+        if (existUserEntity == null) {
+            // 没注册过
+            UserEntity userEntity = new UserEntity();
+            userEntity.setUserId(IDGenerator.generateID());
+            userEntity.setUserName(userName);
+            userEntity.setUserPassword(userPassword);
+            return userDao.save(userEntity);
+        } else {
+            return null;
+        }
+
     }
 
 

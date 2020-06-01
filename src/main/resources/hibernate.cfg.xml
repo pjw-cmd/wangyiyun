@@ -6,7 +6,7 @@
   <session-factory>
     <property name="connection.url">jdbc:mysql://10.21.243.206:3306/music_cloud</property>
     <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-      <mapping class="com.zjgsu.entity.PlayListEntity"/>
+    <mapping class="com.zjgsu.entity.PlayListEntity"/>
       <mapping class="com.zjgsu.entity.PlayListItemEntity"/>
       <mapping class="com.zjgsu.entity.UserEntity"/>
       <!-- <property name="connection.username"/> -->
