@@ -1,4 +1,4 @@
-# Shopping
+# Music_cloud
 ## 简单介绍
 ​	本项目使用Spring+SpringMVC+Hibernate来实现了一个桌面端的网易云音乐。
 
