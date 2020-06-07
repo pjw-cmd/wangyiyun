@@ -31,7 +31,7 @@ public class UserService {
         if (existUserEntity == null) {
             // 没注册过
             UserEntity userEntity = new UserEntity();
-            userEntity.setUserId(IDGenerator.generateID());
+            userEntity.setUserId(IDGenerator.generateID(8));
             userEntity.setUserName(userName);
             userEntity.setUserPassword(userPassword);
             return userDao.save(userEntity);

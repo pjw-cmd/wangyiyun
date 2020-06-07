@@ -8,12 +8,22 @@ import java.util.Objects;
 @Entity
 @Table(name = "play_list_item", schema = "music_cloud", catalog = "")
 public class PlayListItemEntity implements Serializable {
+    private String playListItemId;
     private String playListId;
     private String musicId;
     private Integer isDelete;
     private Timestamp createTime;
 
     @Id
+    @Column(name = "play_list_item_id")
+    public String getPlayListItemId() {
+        return playListItemId;
+    }
+
+    public void setPlayListItemId(String playListItemId) {
+        this.playListItemId = playListItemId;
+    }
+
     @Basic
     @Column(name = "play_list_id")
     public String getPlayListId() {
@@ -69,4 +79,6 @@ public class PlayListItemEntity implements Serializable {
     public int hashCode() {
         return Objects.hash(playListId, musicId, isDelete, createTime);
     }
+
+
 }

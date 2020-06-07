@@ -59,7 +59,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Override
     public String save(T t) {
-        return (String)this.getSession().save(t);
+        return (String) this.getSession().save(t);
     }
 
     @Override
@@ -388,7 +388,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         }
         criteria.setFirstResult((pageNum - 1) * rowCount);
         criteria.setMaxResults(rowCount);
-        return criteria.list();
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        List<T> result = criteria.list();
+        return result;
     }
 
     /**

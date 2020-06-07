@@ -19,3 +19,5 @@
 
   
 
+# link
+https://github.com/Binaryify/NeteaseCloudMusicApi

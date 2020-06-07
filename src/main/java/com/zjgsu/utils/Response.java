@@ -7,22 +7,22 @@ package com.zjgsu.utils;
 public class Response {
     public int code;
     public String message;
-    public Object content;
+    public Object data;
 
     public Response() {
     }
 
-    public Response(int code, String message, Object content) {
+    public Response(int code, String message, Object data) {
         this.code = code;
         this.message = message;
-        this.content = content;
+        this.data = data;
     }
 
-    public int getcode() {
+    public int getCode() {
         return code;
     }
 
-    public void setcode(int code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
@@ -34,11 +34,11 @@ public class Response {
         this.message = message;
     }
 
-    public Object getContent() {
-        return content;
+    public Object getData() {
+        return data;
     }
 
-    public void setContent(Object content) {
-        this.content = content;
+    public void setData(Object data) {
+        this.data = data;
     }
 }

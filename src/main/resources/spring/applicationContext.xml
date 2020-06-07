@@ -14,11 +14,42 @@
 						http://www.springframework.org/schema/aop
 						http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-
+    <!--    http-->
+    <context:component-scan base-package="com.zjgsu.utils"/>
     <context:component-scan base-package="com.zjgsu.service"/>
     <context:component-scan base-package="com.zjgsu.dao"/>
     <!-- 引入数据库资源文件 -->
     <context:property-placeholder location="classpath:properties/database.properties"/>
+<!--    <context:property-placeholder location="classpath:properties/httpclient.properties"/>-->
+
+
+    <!-- 连接管理器 -->
+    <bean id="httpClientConnectionManager" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager">
+        <property name="defaultMaxPerRoute" value="${http.defaultMaxPerRoute}"/>
+        <property name="maxTotal" value="${http.maxTotal}"/>
+    </bean>
+
+    <!-- HttpClientBuilder HttpClient构建器 -->
+    <bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder">
+        <property name="connectionManager" ref="httpClientConnectionManager"/>
+    </bean>
+
+    <!-- HttpClient对象 由HttpClientBuilder生产 -->
+    <bean id="httpClient" class="org.apache.http.impl.client.CloseableHttpClient" factory-bean="httpClientBuilder" factory-method="build" scope="prototype"/>
+
+    <!-- RequestConfig.Builder RequestConfig构建器 -->
+    <bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig.Builder">
+        <property name="connectTimeout" value="${http.connectTimeout}"/>
+        <property name="connectionRequestTimeout" value="${http.connectionRequestTimeout}"/>
+        <property name="staleConnectionCheckEnabled" value="${http.staleConnectionCheckEnabled}"/>
+    </bean>
+
+    <!-- RequestConfig对象 -->
+    <bean id="requestConfig" class="org.apache.http.client.config.RequestConfig" factory-bean="requestConfigBuilder" factory-method="build"/>
+
+
+
+
 
     <!-- 配置数据源 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
@@ -81,7 +112,7 @@
                 -->
                 <prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
                 <prop key="hibernate.connection.url">jdbc:mysql://10.21.243.206:3306/music_cloud</prop>
-                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
+                <prop key="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</prop>
             </props>
         </property>
         <property name="packagesToScan">
@@ -115,5 +146,12 @@
             <tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
         </tx:attributes>
     </tx:advice>
+
+
+
+
+
+
+
 
 </beans>
