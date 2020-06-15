@@ -1,5 +1,6 @@
 package com.zjgsu.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zjgsu.dao.MusicItemDao;
@@ -10,6 +11,7 @@ import com.zjgsu.entity.PlayListEntity;
 import com.zjgsu.entity.PlayListItemEntity;
 import com.zjgsu.utils.IDGenerator;
 import com.zjgsu.utils.MyStringUtils;
+import jdk.nashorn.internal.scripts.JO;
 import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,7 @@ public class PlayListService {
     Integer delete = 1;
 
     int playListItemIdLength = 10;
+
 
     public void updateUserPlayList(String userId, JSONArray playList) {
         PlayListEntity oldPlayListEntity = playListDao.getByCriterion(Restrictions.eq("userId", userId));
@@ -158,4 +161,41 @@ public class PlayListService {
         return null;
     }
 
+
+    /*
+      获取用户播放列表相似的歌曲.
+   */
+    public List<JSONObject> getUserSimilarityPlayList(String userId) {
+        // 根据用户id拿到用户的播放列表
+        PlayListEntity playListEntity = playListDao.getByCriterion(Restrictions.eq("userId", userId));
+        List<JSONObject> musicItemList = new ArrayList<>();
+        List<String> id_list = new ArrayList<>();
+        int max_select_music = 10;
+        if (playListEntity != null) {
+            // 根据播放列表获取到播放列表中的音乐
+            List<PlayListItemEntity> playListItemEntityList = playListItemDao.listByCriterion(
+                    Restrictions.eq("playListId", playListEntity.getPlayListId()), Restrictions.eq("isDelete", not_delete));
+            for (PlayListItemEntity playListItemEntity : playListItemEntityList) {
+                // 根据某个音乐来查询相似的音乐
+                String data = musicItemService.getSimMusicById(playListItemEntity.getMusicId());
+                JSONObject jsonObject = JSONObject.parseObject(data);
+                JSONArray sim_songs = jsonObject.getJSONArray("songs");
+                for (int i = 0; i < sim_songs.size(); i++) {
+                    JSONObject song = sim_songs.getJSONObject(i);
+                    id_list.add(song.getString("id"));
+                }
+                if (id_list.size() >= max_select_music) {
+                    break;
+                }
+            }
+            String ids = MyStringUtils.listToString(id_list, ',');
+            String data = musicItemService.listMusicByIds(ids);
+            JSONObject jsonObject = JSONObject.parseObject(data);
+            JSONArray songs = jsonObject.getJSONArray("songs");
+
+            musicItemList = songs.toJavaList(JSONObject.class);
+            return musicItemList;
+        }
+        return null;
+    }
 }

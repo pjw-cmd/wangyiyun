@@ -30,6 +30,31 @@ public class MusicItemService {
     @Autowired
     RequestConfig requestConfig;
 
+
+    /**
+     *
+     */
+    public String getSimMusicById(String id) {
+        String url = "http://10.21.243.206:3000/simi/song?id=" + id;
+        HttpGet httpGet = new HttpGet(url);
+        httpGet.setConfig(requestConfig);
+        CloseableHttpResponse response = null;
+        String responseContext = null;
+        try {
+            //使用HttpClient发起请求得到响应
+            response = httpClient.execute(httpGet);
+            //获得响应实体
+            HttpEntity entity = response.getEntity();
+            Header[] headers = response.getAllHeaders();
+            //将响应实体转换为字符串
+            responseContext = EntityUtils.toString(entity, UTF8);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return responseContext;
+    }
+
     /**
      * 先写一个能根据音乐 ids获取音乐的方法
      */

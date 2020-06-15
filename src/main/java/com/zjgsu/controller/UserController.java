@@ -36,7 +36,7 @@ public class UserController {
             transMessage.setData(userId);
         } else {
             transMessage.setCode(300);
-            transMessage.setMessage("登录失败");
+            transMessage.setMessage("登录失败,请检查用户名和密码");
         }
         return JSON.toJSONString(transMessage);
     }
@@ -49,19 +49,30 @@ public class UserController {
          */
         JSONObject jsonObject = JSONObject.parseObject(jsonString);
         Response transMessage = new Response();
-        transMessage.setCode(300);
-        transMessage.setMessage("注册失败");
         String userName = jsonObject.getString("user_name");
         String userPassword = jsonObject.getString("user_password");
-        String userId = userService.register(userName, userPassword);
-        if (StringUtils.isNotBlank(userId)) {
-            // 注册完后自动为其创建播放列表
-            String playListId = playListService.createPlayList(userId);
-            if (StringUtils.isNotBlank(playListId)) {
-                transMessage.setCode(200);
-                transMessage.setMessage("注册成功");
+        String userPasswordSecond = jsonObject.getString("user_password_second");
+        if (userPassword.equals(userPasswordSecond)) {
+            String userId = userService.register(userName, userPassword);
+            if (StringUtils.isNotBlank(userId)) {
+                // 注册完后自动为其创建播放列表
+                String playListId = playListService.createPlayList(userId);
+                if (StringUtils.isNotBlank(playListId)) {
+                    transMessage.setCode(200);
+                    transMessage.setMessage("注册成功");
+                } else {
+                    transMessage.setCode(300);
+                    transMessage.setMessage("注册失败，请输入其他的用户名");
+                }
+            } else {
+                transMessage.setCode(300);
+                transMessage.setMessage("注册失败，请输入其他的用户名");
             }
+        } else {
+            transMessage.setCode(300);
+            transMessage.setMessage("两次密码输入有误");
         }
+
         return JSON.toJSONString(transMessage);
     }
 

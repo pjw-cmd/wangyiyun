@@ -47,6 +47,12 @@ public class PlayListController {
     RequestConfig requestConfig;
 
 
+    /**
+     * 更新用户的播放列表
+     *
+     * @param jsonString
+     * @return
+     */
     @RequestMapping(value = "/updateUserPlayList", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String updateUserPlayList(@RequestBody String jsonString) {
@@ -57,17 +63,6 @@ public class PlayListController {
         playListService.updateUserPlayList(userId, playList);
         transMessage.setCode(200);
         transMessage.setMessage("更新成功");
-//        String playlistId = jsonObject.getString("playlist_id");
-//        String musicId = jsonObject.getString("music_id");
-//        String playListId = playListService.addMusicToPlayList(playlistId, musicId);
-//
-//        if (StringUtils.isNotBlank(playListId)) {
-//            transMessage.setCode(200);
-//            transMessage.setMessage("添加成功");
-//        } else {
-//            transMessage.setCode(300);
-//            transMessage.setMessage("添加失败");
-//        }
         return JSON.toJSONString(transMessage);
     }
 
@@ -117,7 +112,6 @@ public class PlayListController {
     @ResponseBody
     public String getListById(String user_id) {
         Response transMessage = new Response();
-//        List<String> String = playListService.getUserPlayList(user_id);
         List<JSONObject> userPlayList = playListService.getUserPlayList(user_id);
         if (userPlayList != null) {
 //            List<String> ids = new ArrayList<>();
@@ -127,6 +121,27 @@ public class PlayListController {
 //            }
 //            String string_ids = MyStringUtils.listToString(ids, ',');
 //            String music_string = musicItemService.listMusicByIds(string_ids);
+            transMessage.setData(userPlayList);
+        }
+        transMessage.setCode(200);
+        transMessage.setMessage("查询成功");
+        return JSON.toJSONString(transMessage);
+    }
+
+
+    /**
+     * 根据用户的
+     *
+     * @param user_id
+     * @return 返回歌单
+     */
+    @RequestMapping(value = "/getUserSimilarityPlayList", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String getUserSimilarityPlayList(String user_id) {
+        Response transMessage = new Response();
+        List<JSONObject> userPlayList = playListService.getUserSimilarityPlayList(user_id);
+        if (userPlayList != null) {
+
             transMessage.setData(userPlayList);
         }
         transMessage.setCode(200);
