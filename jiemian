@@ -1,0 +1,64 @@
+import tkinter  
+from tkinter import messagebox
+  
+class Login(object):  
+    def __init__(self):    
+        self.root = tkinter.Tk()   
+        self.root.title("XT")  
+        self.root.geometry('450x300')  
+        self.canvas = tkinter.Canvas(self.root, height=200, width=500)
+        self.image_file = tkinter.PhotoImage(file='welcome_1.gif')  
+        self.image = self.canvas.create_image(0,0, anchor='nw', image=self.image_file) 
+        self.canvas.pack(side='top')
+  
+
+        self.label_account = tkinter.Label(self.root, text='Account: ')  
+
+        self.label_password = tkinter.Label(self.root, text='Password: ')  
+          
+    
+        self.input_account = tkinter.Entry(self.root, width=30)  
+        self.input_password = tkinter.Entry(self.root, show='*',  width=30)  
+  
+    
+        self.login_button = tkinter.Button(self.root, command = self.backstage_interface, text = "Login", width=10)    
+        self.siginUp_button = tkinter.Button(self.root, command = self.siginUp_interface, text = "Sign up", width=10)  
+  
+    def gui_arrang(self):  
+        self.label_account.place(x=60, y= 170)  
+        self.label_password.place(x=60, y= 195)  
+        self.input_account.place(x=135, y=170)  
+        self.input_password.place(x=135, y=195)  
+        self.login_button.place(x=140, y=235)  
+        self.siginUp_button.place(x=240, y=235)  
+  
+
+    def siginUp_interface(self):  
+        # self.root.destroy()  
+        tkinter.messagebox.showinfo(title='XT', message='INTER')  
+          
+
+    def backstage_interface(self):  
+        account = self.input_account.get().ljust(10," ")  
+        password = self.input_password.get().ljust(10," ")  
+        verifyResult = verifyAccount.verifyAccountData(account,password)  
+  
+        if verifyResult=='master':  
+            self.root.destroy()  
+            tkinter.messagebox.showinfo(title='XT', message='inter GL')  
+        elif verifyResult=='user':  
+            self.root.destroy()  
+            tkinter.messagebox.showinfo(title='XT', message='inter')   
+        elif verifyResult=='noAccount':  
+            tkinter.messagebox.showinfo(title='XT', message='WRONG')  
+        elif verifyResult=='noPassword':  
+            tkinter.messagebox.showinfo(title='XT', message='WRONG!')  
+  
+def main():  
+    L = Login()   
+    L.gui_arrang()    
+    tkinter.mainloop()  
+  
+  
+if __name__ == '__main__':  
+    main() 
